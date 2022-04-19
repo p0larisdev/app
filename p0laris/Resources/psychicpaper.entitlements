@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>application-identifier</key>
+    <string>3H8GT4N4A6.spv.p0laris-with-psychic-paper</string>
+    <key>com.apple.developer.team-identifier</key>
+    <string>3H8GT4N4A6</string>
+    <key>get-task-allow</key>
+    <true/>
+    <key>keychain-access-groups</key>
+    <array>
+        <string>3H8GT4N4A6.spv.p0laris-with-psychic-paper</string>
+    </array>
+    <!-- these aren't the droids you're looking for -->
+    <!---><!-->
+    <key>platform-application</key>
+    <true/>
+    <key>com.apple.private.security.no-container</key>
+    <true/>
+    <key>task_for_pid-allow</key>
+    <true/>
+    <!-- -->
+</dict>
+</plist>

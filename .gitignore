@@ -1,0 +1,15 @@
+.DS_Store
+*/.DS_Store
+**/.DS_Store
+
+build
+*/build
+**/build
+
+build_
+*/build_
+**/build_
+
+*.ipa
+*/*.ipa
+**/*.ipa
