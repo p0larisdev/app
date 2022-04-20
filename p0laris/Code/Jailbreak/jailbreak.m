@@ -973,7 +973,7 @@ bool extract_bootstrap(void) {
 	bool re_extracting = false;
 	bool ret = true;
 	
-	if (exists("/.p0laris")) {
+	if (exists("/.p0laris") || exists("/.installed_home_depot")) {
 		re_extracting = true;
 		lprintf("k? guess we're re-extracting then. your choice, i guess? ...");
 	}
@@ -1095,7 +1095,7 @@ bool post_jailbreak(void) {
 	lprintf("mount(...); = %d\n", mntr);
 	
 #if !FIRST_TIME_OVERRIDE
-	if (!exists("/.p0laris")) {
+	if (!exists("/.p0laris") && !exists("/.installed_home_depot")) {
 #endif
 		progress_ui("extracting bootstrap");
 		extract_bootstrap();
