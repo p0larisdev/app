@@ -1163,9 +1163,14 @@ bool post_jailbreak(void) {
 	return ret;
 }
 
+bool patch_kernel10(uint8_t* buf, uint32_t len) {
+	return true;
+}
+
 bool jailbreak10(void) {
+	uint32_t before, after, pdstused, psrcused;
 	uint8_t *buf, *start_buf, *whatever;
-	uint32_t before, after;
+	char* darwin_kernel;
 	size_t sz;
 	
 	tfp0 = v0rtex_me_harder();
@@ -1218,10 +1223,8 @@ bool jailbreak10(void) {
 	
 	printf("%x\n", *(uint32_t*)start_buf);
 	
-	uint32_t pdstused, psrcused;
-	
 	lzss_me_harder(whatever, sz * 2, &pdstused, start_buf, sz, &psrcused);
-	char* darwin_kernel = (char*)memmem(whatever, sz * 2, "Darwin", strlen("Darwin"));
+	darwin_kernel = (char*)memmem(whatever, sz * 2, "Darwin", strlen("Darwin"));
 	
 	printf("%s\n", darwin_kernel);
 	printf("%x\n", *(uint32_t*)whatever);
