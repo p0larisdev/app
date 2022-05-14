@@ -17,19 +17,19 @@ other versions are a bit hit or miss.
 ```
 - App
 @__spv			- jailbreak "framework", patchfinder, untether, UI, website,
-				  logo, tbd
+			  logo, tbd
 @s1guza, @tihmstar	- kernel exploit
 @JonathanSeals		- CBPatcher (parts of which are used in the p0laris
-								 patchfinder)
+				     patchfinder)
 @dora2ios		- daibutsu patchfinder, which iirc is actually based on the
-				  evasi0n(?) patchfinder. (parts of the daibutsu patchfinder
-					  		   were used in p0laris'
-							   patchfinder.)
+			  evasi0n(?) patchfinder. (parts of the daibutsu patchfinder
+					  	   were used in p0laris'
+						   patchfinder.)
 @saurik?		- bootstrap
 @REALKJCMEMBER (?)	- kernel pmap patching code
 @tihmstar		- small amounts of code stolen from doubleH3lix
-				  (springboard fixing stuff, permission stuff, and that's it
-				   iirc)
+			  (springboard fixing stuff, permission stuff, and that's it
+			   iirc)
 
 - Untether
 @pod2g			- original racoon bug
