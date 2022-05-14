@@ -93,7 +93,7 @@ void* find_sym(struct mach_header *mh, const char *name) {
 uint32_t find_kextbase(void *kernelcache, size_t size) {
     
     if (!(*(uint32_t*)&kernelcache[0] == 0xFEEDFACE)) {
-        PatchLog("This doesn't look like a kernelcache\n");
+        printf("This doesn't look like a kernelcache\n");
         return 0;
     }
     
@@ -126,7 +126,7 @@ uint32_t find_kextbase(void *kernelcache, size_t size) {
 uint32_t find_kext_text_section(void *kernelcache, size_t size, const char *name) {
     
     if (!(*(uint32_t*)&kernelcache[0] == 0xFEEDFACE)) {
-        PatchLog("This doesn't look like a kernelcache\n");
+        printf("This doesn't look like a kernelcache\n");
         return 0;
     }
     
@@ -142,7 +142,7 @@ uint32_t find_kext_text_section(void *kernelcache, size_t size, const char *name
             uint32_t fileSize = sc->filesize;
             
             if (fileSize > size || (fileSize+fileOffToBegin > size)) {
-                PatchLog("Bounds check error\n");
+                printf("Bounds check error\n");
                 return 0;
             }
             
@@ -181,7 +181,7 @@ uint32_t find_kext_text_section(void *kernelcache, size_t size, const char *name
         done:;
             
             if(!requestedKextStart) {
-                PatchLog("Failed to find beginning of requested kext __text section\n");
+                printf("Failed to find beginning of requested kext __text section\n");
                 return 0;
             }
             
