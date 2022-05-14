@@ -778,6 +778,7 @@
             moduleName = "">
             <Locations>
                <Location
+                  uuid = "C02E8705-7FB4-46BF-BD2C-B70DE77B5CF4 - 754fcfa1a77f6bda"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -786,6 +787,21 @@
                   usesParentBreakpointCondition = "Yes"
                   offsetFromSymbolStart = "0">
                </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "2252ECB4-43B5-4853-8D00-3ECE0C202F7E"
+            shouldBeEnabled = "Yes"
+            nameForDebugger = "mainthreadshit"
+            condition = "!(BOOL)[NSThread isMainThread]"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "[UIView layoutIfNeeded]"
+            moduleName = "">
+            <Locations>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

@@ -22,6 +22,7 @@
 #include <spawn.h>
 
 #import "patchfinder.h"
+#import "lzssdec.h"
 #import "v0rtex.h"
 #import "common.h"
 #import "sbops.h"
@@ -53,6 +54,7 @@ void exploit_cleanup(task_t);
 int progress(const char* s, ...);
 int progress_ui(const char* s, ...);
 
+#define DUMP_LENGTH (32 * 1024 * 1024)
 #define UNSLID_BASE 0x80001000
 
 // A5
@@ -1162,7 +1164,9 @@ bool post_jailbreak(void) {
 }
 
 bool jailbreak10(void) {
+	uint8_t *buf, *start_buf, *whatever;
 	uint32_t before, after;
+	size_t sz;
 	
 	tfp0 = v0rtex_me_harder();
 	lprintf("tfp0=0x%x", tfp0);
@@ -1199,11 +1203,35 @@ bool jailbreak10(void) {
 		goto done;
 	}
 	
+	FILE* fp = fopen("/System/Library/Caches/com.apple.kernelcaches/kernelcache", "rb");
+	
+	fseek(fp, 0, SEEK_END);
+	sz = ftell(fp);
+	rewind(fp);
+	
+	buf = (uint8_t*)malloc(sz);
+	whatever = (uint8_t*)malloc(sz * 2);
+	
+	fread(buf, 1, DUMP_LENGTH, fp);
+	
+	start_buf = (uint8_t*)memmem(buf, sz, "\xff\xce\xfa\xed\xfe", 5);
+	
+	printf("%x\n", *(uint32_t*)start_buf);
+	
+	uint32_t pdstused, psrcused;
+	
+	lzss_me_harder(whatever, sz * 2, &pdstused, start_buf, sz, &psrcused);
+	char* darwin_kernel = (char*)memmem(whatever, sz * 2, "Darwin", strlen("Darwin"));
+	
+	printf("%s\n", darwin_kernel);
+	printf("%x\n", *(uint32_t*)whatever);
+	
+	free(buf);
+	fclose(fp);
+	
 done:
 	return true;
 }
-
-#define DUMP_LENGTH (32 * 1024 * 1024)
 
 bool jailbreak(void) {
 #if DUMP_KERNEL

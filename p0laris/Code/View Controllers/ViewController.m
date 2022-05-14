@@ -37,7 +37,7 @@ id param_;
 }
 
 void set_label_text(char* s) {
-	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+	dispatch_async(dispatch_get_main_queue(), ^{
 		[param_ _set_label_text:s];
 	});
 }
@@ -50,8 +50,8 @@ void set_label_text(char* s) {
 }
 
 void set_button_text(char* s) {
-	dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-	[param_ _set_button_text:s];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[param_ _set_button_text:s];
 	});
 }
 

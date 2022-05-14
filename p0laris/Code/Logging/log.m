@@ -78,7 +78,7 @@ void lprintf(char* s, ...) {
     }
 #endif
     
-    NSLog(@"[*] p0laris @ %s: %s", time_str, msg);
+    NSLog(@"%s", msg);
     
     va_end(ap);
     free(msg);
@@ -94,9 +94,7 @@ int internal_progress_ui(char* msg) {
      */
     
     int ret = 0;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        set_label_text(msg);
-    });
+    set_label_text(msg);
     
     return ret;
 }
