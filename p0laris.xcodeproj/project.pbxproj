@@ -24,7 +24,7 @@
 		A7B651212747FCB50014D089 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B651202747FCB50014D089 /* main.m */; settings = {COMPILER_FLAGS = "-D __ID_STUFF__=\"\\\"$EXECUTABLE_NAME-$USER-$UID-$PLATFORM_NAME-$CURRENT_ARCH-$FULL_PRODUCT_NAME-$SDK_NAME-$SDK_PRODUCT_BUILD_VERSION-$XCODE_PRODUCT_BUILD_VERSION\\\"\""; }; };
 		A7B6512C27480E770014D089 /* phoenix.c in Sources */ = {isa = PBXBuildFile; fileRef = A7B6512B27480E770014D089 /* phoenix.c */; };
 		A7B6512F27480E8C0014D089 /* jailbreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B6512E27480E8C0014D089 /* jailbreak.m */; };
-		A7DFB3AC28304621006B22EC /* lzssdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB3AB28304621006B22EC /* lzssdec.cpp */; };
+		A7DFB3B72830675E006B22EC /* lzssdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB3B62830675E006B22EC /* lzssdec.cpp */; };
 		A7E888F8274ED0AC00989B65 /* Cydia-9.0r4-Raw.tar in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F5274ED0AB00989B65 /* Cydia-9.0r4-Raw.tar */; };
 		A7E888F9274ED0AC00989B65 /* launchctl in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F6274ED0AB00989B65 /* launchctl */; };
 		A7E888FA274ED0AC00989B65 /* tar in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F7274ED0AC00989B65 /* tar */; };
@@ -6685,8 +6685,8 @@
 		A7B6512B27480E770014D089 /* phoenix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = phoenix.c; sourceTree = "<group>"; };
 		A7B6512E27480E8C0014D089 /* jailbreak.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreak.m; sourceTree = "<group>"; usesTabs = 1; };
 		A7B65135274810BE0014D089 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = IOKit/IOKit.framework; sourceTree = "<group>"; };
-		A7DFB3AB28304621006B22EC /* lzssdec.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lzssdec.cpp; sourceTree = "<group>"; usesTabs = 0; };
-		A7DFB3B328306111006B22EC /* lzssdec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lzssdec.h; sourceTree = "<group>"; };
+		A7DFB3B52830675E006B22EC /* lzssdec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lzssdec.h; path = "p0laris/Patchfinder/iOS 10/lzssdec.h"; sourceTree = SOURCE_ROOT; };
+		A7DFB3B62830675E006B22EC /* lzssdec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lzssdec.cpp; path = "p0laris/Patchfinder/iOS 10/lzssdec.cpp"; sourceTree = SOURCE_ROOT; };
 		A7E888F5274ED0AB00989B65 /* Cydia-9.0r4-Raw.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = "Cydia-9.0r4-Raw.tar"; sourceTree = "<group>"; };
 		A7E888F6274ED0AB00989B65 /* launchctl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = launchctl; sourceTree = "<group>"; };
 		A7E888F7274ED0AC00989B65 /* tar */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = tar; sourceTree = "<group>"; };
@@ -17684,8 +17684,8 @@
 		A7DFB3AA2830460E006B22EC /* iOS 10 */ = {
 			isa = PBXGroup;
 			children = (
-				A7DFB3AB28304621006B22EC /* lzssdec.cpp */,
-				A7DFB3B328306111006B22EC /* lzssdec.h */,
+				A7DFB3B62830675E006B22EC /* lzssdec.cpp */,
+				A7DFB3B52830675E006B22EC /* lzssdec.h */,
 			);
 			path = "iOS 10";
 			sourceTree = "<group>";
@@ -17810,7 +17810,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7DFB3AC28304621006B22EC /* lzssdec.cpp in Sources */,
+				A7DFB3B72830675E006B22EC /* lzssdec.cpp in Sources */,
 				A7A2DE7128302E8200CE5939 /* offsets.m in Sources */,
 				A7B651162747FC9E0014D089 /* ViewController.m in Sources */,
 				A757304D279B1126004A4E83 /* log.m in Sources */,
