@@ -43,9 +43,9 @@ void lprintf(char* s, ...) {
             log_fp = fopen(open_this, "w");
         }
         
-        dup2(log_fp->_file, 2);
-        dup2(log_fp->_file, 1);
-        dup2(log_fp->_file, 0);
+//        dup2(log_fp->_file, 2);
+//        dup2(log_fp->_file, 1);
+//        dup2(log_fp->_file, 0);
     }
     
     char* msg = NULL;
@@ -94,7 +94,7 @@ int internal_progress_ui(char* msg) {
      */
     
     int ret = 0;
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         set_label_text(msg);
     });
     

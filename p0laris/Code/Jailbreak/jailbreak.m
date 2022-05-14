@@ -22,6 +22,7 @@
 #include <spawn.h>
 
 #import "patchfinder.h"
+#import "v0rtex.h"
 #import "common.h"
 #import "sbops.h"
 #import "log.h"
@@ -38,7 +39,7 @@
 #define INSTALL_UNTETHER 0
 #define BTSERVER_USED 0
 #define UNPATCH_PMAP 0
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 #define DO_CSBYPASS 0
 #define DUMP_KERNEL 0
 
@@ -56,8 +57,15 @@ int progress_ui(const char* s, ...);
 
 // A5
 uint32_t pmap_addr = 0x003F6454;
+uint32_t a6_1034_pmap_addr = 0x003E9974;
 
 uint32_t find_kernel_pmap(void) {
+	if (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber10_0) {
+		/*
+		 *  janky hack
+		 */
+		return a6_1034_pmap_addr + kernel_base;
+	}
 	return pmap_addr + kernel_base;
 }
 
@@ -1153,29 +1161,75 @@ bool post_jailbreak(void) {
 	return ret;
 }
 
+bool jailbreak10(void) {
+	uint32_t before, after;
+	
+	tfp0 = v0rtex_me_harder();
+	lprintf("tfp0=0x%x", tfp0);
+	
+	progress_ui("patching pmap");
+	patch_kernel_pmap();
+	progress("patched pmap");
+	
+	progress_ui("checking pmap patch");
+	
+	before = kread_uint32(kernel_base);
+	kwrite_uint32(kernel_base, 0x41424344);
+	after = kread_uint32(kernel_base);
+	kwrite_uint32(kernel_base, before);
+	
+#if ENABLE_DEBUG
+	progress("kbase before: 0x%x, kbase after: 0x%x",
+			 before,
+			 after);
+#endif
+	
+	/*
+	 *  i commented out "before == 0xfeedface" as at times,
+	 *  i will test kernel patches and/or other functionality
+	 *  on an already jailbroken device, and don't feel like rebooting.
+	 *  also so that you can re-install the untether without rebooting
+	 *  after installing the application :P
+	 */
+	
+	if (before != after && /* before == 0xfeedface && */ after == 0x41424344) {
+		progress_ui("pmap patched!");
+	} else {
+		progress_ui("pmap patch failed");
+		goto done;
+	}
+	
+done:
+	return true;
+}
+
 #define DUMP_LENGTH (32 * 1024 * 1024)
 
 bool jailbreak(void) {
 #if DUMP_KERNEL
-	NSString *ns_doc_dir	= NULL;
+	NSString *ns_doc_dir = NULL;
 #endif
 	
-	uint32_t before		 = -1;
-	uint32_t after		  = -1;
+	uint32_t before = -1;
+	uint32_t after = -1;
 	
 #if DUMP_KERNEL
-	NSArray *paths		  = NULL;
+	NSArray *paths = NULL;
 #endif
 	
 #if DUMP_KERNEL
-	char* open_this		 = NULL;
-	char* doc_dir		   = NULL;
-	char* dump			  = NULL;
+	char* open_this = NULL;
+	char* doc_dir = NULL;
+	char* dump = NULL;
 #endif
 	
-	bool ret				= false;
+	bool ret = false;
 	
 	progress_ui("exploiting kernel");
+	
+	if (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber10_0) {
+		return jailbreak10();
+	}
 	
 	tfp0 = get_kernel_task();
 	

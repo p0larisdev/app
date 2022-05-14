@@ -13,6 +13,9 @@
 		A76B623D27E6955F0031E8BB /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B65135274810BE0014D089 /* IOKit.framework */; };
 		A77747F12794BD91004F78E6 /* Milkshake.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A77747F02794BD2A004F78E6 /* Milkshake.ttf */; };
 		A78923CA2793F5C600A61440 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A78923C92793F5BF00A61440 /* logo.png */; };
+		A7A2DE692830284300CE5939 /* p0laris.png in Resources */ = {isa = PBXBuildFile; fileRef = A7A2DE682830284300CE5939 /* p0laris.png */; };
+		A7A2DE7028302E8200CE5939 /* v0rtex.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2DE6C28302E8000CE5939 /* v0rtex.m */; };
+		A7A2DE7128302E8200CE5939 /* offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2DE6E28302E8100CE5939 /* offsets.m */; };
 		A7B651102747FC9E0014D089 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B6510F2747FC9E0014D089 /* AppDelegate.m */; };
 		A7B651162747FC9E0014D089 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B651152747FC9E0014D089 /* ViewController.m */; };
 		A7B651192747FC9E0014D089 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B651172747FC9E0014D089 /* Main.storyboard */; };
@@ -1357,7 +1360,7 @@
 		A76B4BB727E690630031E8BB /* zconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
 		A76B4BB827E690630031E8BB /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		A76B4BBA27E690630031E8BB /* CarrierBundleUtilities.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CarrierBundleUtilities.tbd; sourceTree = "<group>"; };
-		A76B4BBB27E690630031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = file; path = fdrtrustobject; sourceTree = "<group>"; };
+		A76B4BBB27E690630031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = text; path = fdrtrustobject; sourceTree = "<group>"; };
 		A76B4BBC27E690630031E8BB /* IOABPLib.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = IOABPLib.tbd; sourceTree = "<group>"; };
 		A76B4BBD27E690630031E8BB /* libAccessibility.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libAccessibility.tbd; sourceTree = "<group>"; };
 		A76B4BBE27E690630031E8BB /* libacmobileshim.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libacmobileshim.tbd; sourceTree = "<group>"; };
@@ -2854,7 +2857,7 @@
 		A76B51E627E690650031E8BB /* zconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
 		A76B51E727E690650031E8BB /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		A76B51E927E690650031E8BB /* CarrierBundleUtilities.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CarrierBundleUtilities.tbd; sourceTree = "<group>"; };
-		A76B51EA27E690650031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = file; path = fdrtrustobject; sourceTree = "<group>"; };
+		A76B51EA27E690650031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = text; path = fdrtrustobject; sourceTree = "<group>"; };
 		A76B51EB27E690650031E8BB /* IOABPLib.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = IOABPLib.tbd; sourceTree = "<group>"; };
 		A76B51EC27E690650031E8BB /* libAccessibility.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libAccessibility.tbd; sourceTree = "<group>"; };
 		A76B51ED27E690650031E8BB /* libacmobileshim.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libacmobileshim.tbd; sourceTree = "<group>"; };
@@ -4973,7 +4976,7 @@
 		A76B5B4227E6940D0031E8BB /* zconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
 		A76B5B4327E6940D0031E8BB /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		A76B5B4527E6940D0031E8BB /* CarrierBundleUtilities.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CarrierBundleUtilities.tbd; sourceTree = "<group>"; };
-		A76B5B4627E6940D0031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = file; path = fdrtrustobject; sourceTree = "<group>"; };
+		A76B5B4627E6940D0031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = text; path = fdrtrustobject; sourceTree = "<group>"; };
 		A76B5B4727E6940D0031E8BB /* IOABPLib.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = IOABPLib.tbd; sourceTree = "<group>"; };
 		A76B5B4827E6940D0031E8BB /* libAccessibility.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libAccessibility.tbd; sourceTree = "<group>"; };
 		A76B5B4927E6940D0031E8BB /* libacmobileshim.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libacmobileshim.tbd; sourceTree = "<group>"; };
@@ -6478,7 +6481,7 @@
 		A76B617B27E694100031E8BB /* zconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
 		A76B617C27E694100031E8BB /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		A76B617E27E694100031E8BB /* CarrierBundleUtilities.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = CarrierBundleUtilities.tbd; sourceTree = "<group>"; };
-		A76B617F27E694100031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = file; path = fdrtrustobject; sourceTree = "<group>"; };
+		A76B617F27E694100031E8BB /* fdrtrustobject */ = {isa = PBXFileReference; lastKnownFileType = text; path = fdrtrustobject; sourceTree = "<group>"; };
 		A76B618027E694100031E8BB /* IOABPLib.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = IOABPLib.tbd; sourceTree = "<group>"; };
 		A76B618127E694100031E8BB /* libAccessibility.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libAccessibility.tbd; sourceTree = "<group>"; };
 		A76B618227E694100031E8BB /* libacmobileshim.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libacmobileshim.tbd; sourceTree = "<group>"; };
@@ -6663,6 +6666,11 @@
 		A76B623927E694100031E8BB /* texturetool */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = texturetool; sourceTree = "<group>"; };
 		A77747F02794BD2A004F78E6 /* Milkshake.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Milkshake.ttf; sourceTree = "<group>"; };
 		A78923C92793F5BF00A61440 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		A7A2DE682830284300CE5939 /* p0laris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p0laris.png; sourceTree = "<group>"; };
+		A7A2DE6C28302E8000CE5939 /* v0rtex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = v0rtex.m; sourceTree = "<group>"; };
+		A7A2DE6D28302E8000CE5939 /* v0rtex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v0rtex.h; sourceTree = "<group>"; };
+		A7A2DE6E28302E8100CE5939 /* offsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = offsets.m; sourceTree = "<group>"; };
+		A7A2DE6F28302E8100CE5939 /* offsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = offsets.h; sourceTree = "<group>"; };
 		A7B6510B2747FC9E0014D089 /* p0laris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = p0laris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B6510E2747FC9E0014D089 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; usesTabs = 1; };
 		A7B6510F2747FC9E0014D089 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; usesTabs = 1; };
@@ -6712,6 +6720,10 @@
 		A7463223274ECC2500F7B5CE /* Kernel Exploit */ = {
 			isa = PBXGroup;
 			children = (
+				A7A2DE6F28302E8100CE5939 /* offsets.h */,
+				A7A2DE6E28302E8100CE5939 /* offsets.m */,
+				A7A2DE6D28302E8000CE5939 /* v0rtex.h */,
+				A7A2DE6C28302E8000CE5939 /* v0rtex.m */,
 				A7B6512B27480E770014D089 /* phoenix.c */,
 			);
 			path = "Kernel Exploit";
@@ -17608,6 +17620,7 @@
 		A78923C72793F15400A61440 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A7A2DE682830284300CE5939 /* p0laris.png */,
 				A77747F02794BD2A004F78E6 /* Milkshake.ttf */,
 				A78923C92793F5BF00A61440 /* logo.png */,
 				A7B6511A2747FCB50014D089 /* Assets.xcassets */,
@@ -17739,6 +17752,7 @@
 				A78923CA2793F5C600A61440 /* logo.png in Resources */,
 				A7B6511E2747FCB50014D089 /* LaunchScreen.storyboard in Resources */,
 				A7E888F9274ED0AC00989B65 /* launchctl in Resources */,
+				A7A2DE692830284300CE5939 /* p0laris.png in Resources */,
 				A7B6511B2747FCB50014D089 /* Assets.xcassets in Resources */,
 				A7B651192747FC9E0014D089 /* Main.storyboard in Resources */,
 				A7E888F8274ED0AC00989B65 /* Cydia-9.0r4-Raw.tar in Resources */,
@@ -17783,9 +17797,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7A2DE7128302E8200CE5939 /* offsets.m in Sources */,
 				A7B651162747FC9E0014D089 /* ViewController.m in Sources */,
 				A757304D279B1126004A4E83 /* log.m in Sources */,
 				A7B6512C27480E770014D089 /* phoenix.c in Sources */,
+				A7A2DE7028302E8200CE5939 /* v0rtex.m in Sources */,
 				A7B651102747FC9E0014D089 /* AppDelegate.m in Sources */,
 				A738C75127A450BE00005412 /* quote.m in Sources */,
 				A7B6512F27480E8C0014D089 /* jailbreak.m in Sources */,
@@ -18032,7 +18048,7 @@
 					"$(PROJECT_DIR)",
 				);
 				OTHER_CFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = dev.p0laris.p0laris;
+				PRODUCT_BUNDLE_IDENTIFIER = backwithavengeance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -18068,7 +18084,7 @@
 					"$(PROJECT_DIR)",
 				);
 				OTHER_CFLAGS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = dev.p0laris.p0laris;
+				PRODUCT_BUNDLE_IDENTIFIER = backwithavengeance;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
