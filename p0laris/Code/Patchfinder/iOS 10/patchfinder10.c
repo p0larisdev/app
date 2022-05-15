@@ -202,3 +202,123 @@ uint32_t find_kext_text_section(void *kernelcache, size_t size, const char *name
     
     return 0;
 }
+
+uint32_t find_mount_common10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    float version_float = strtof(version, 0);
+    for (uint32_t i = 0; i < ksize; i++) {
+        if (version_float < (float)10.3) {
+            if (*(uint64_t*)&kdata[i] == 0xf04fd1040f01f01b && *(uint32_t*)&kdata[i+8] == 0x9d080801) {
+                printf("[*] found mount_common: 0x%x\n", i + 0x5);
+                return i + 0x5;
+            }
+        }
+        else {
+            if (*(uint32_t*)&kdata[i] == 0x0f01f01a && *(uint16_t*)&kdata[i+4] == 0xd13b) {
+                printf("[*] found mount_common: 0x%x\n", i + 0x5);
+                
+                return i + 0x5;
+            }
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_mapForIO10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    float version_float = strtof(version, 0);
+    for (uint32_t i = 0; i < ksize; i++) {
+        if (*(uint64_t*)&kdata[i] == 0xf010798044406da8 && *(uint16_t*)&kdata[i+0x8] == 0x0f01) {
+            uint32_t mapForIO = i - 4;
+            printf("[*] found mapForIO: 0x%08x\n", mapForIO);
+            return mapForIO;
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_PE_i_can_has_debugger_offset10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    int i = 0;
+    
+    i = (uint32_t)find_sym(kdata, "_PE_i_can_has_debugger")-(uint32_t)kdata;
+    
+    for (i=i; i < (i+0x100); i+=0x2) {
+        if (*(uint16_t*)(kdata+i) == 0x4770) {
+//            printf("Found BX LR at 0x%x\n", i);
+            printf("[*] found PE_i_can_has_debugger_offset: 0x%08x\n", i - 0x4);
+            return i - 0x4;
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_nosuid_enforcement10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    float version_float = strtof(version, 0);
+    for (uint32_t i = 0; i < ksize; i++) {
+        if (*(uint64_t*)&kdata[i] == 0x0108f04043080102) {
+            i += 0x4;
+            printf("[*] found nosuid enforcement: 0x%08x\n", i + 0x2);
+            return i + 0x2;
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_tfp10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    float version_float = strtof(version, 0);
+    for (uint32_t i = 0; i < ksize; i++) {
+        if (*(uint64_t*)&kdata[i] == 0xd04d2e001101e9cd && *(uint32_t*)&kdata[i+0xC] == 0x28009002) {
+            printf("[*] found task for pid: 0x%x\n", i + 0x6);
+            return i + 0x6;
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_fuck(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    uint32_t OSMalloc_Tagfree10 = (uint32_t)find_sym(kdata, "_OSMalloc_Tagfree")-(int)kdata;
+    uint32_t PE_i_can_has_kernel_configuration = (uint32_t)find_sym(kdata, "_PE_i_can_has_kernel_configuration")-(uint32_t)kdata;
+    OSMalloc_Tagfree10 += 0x80001000 + 1;
+    PE_i_can_has_kernel_configuration += 0x80001000 + 1;
+    
+    for (uint32_t i = 0; i < ksize; i++) {
+        if (*(uint32_t*)&kdata[i] == OSMalloc_Tagfree10) {
+            if (*(uint32_t*)&kdata[i+0x4] == PE_i_can_has_kernel_configuration) {
+                printf("[*] found lwvm call thingy: 0x%x\n", i + 0x4);
+                return i + 0x4;
+            }
+        }
+    }
+    
+    return 0xffffffff;
+}
+
+uint32_t find_bxlr_gadget(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    uint32_t bxlr_gadget = 0;
+    for (int i = 0; i < ksize; i++) {
+        if (*(uint32_t*)&kdata[i] == 0x47702000) {
+            return i + 0x1;
+//            bxlr_gadget = i + 0x80001000 + 0x1;
+//            return bxlr_gadget;
+        }
+    }
+    return 0xffffffff;
+}
+
+uint32_t find_amfi_memcmp(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    uint32_t memcmp_addy = (uint32_t)find_sym(kdata, "_memcmp")-(uint32_t)kdata;
+    memcmp_addy += 0x80001000 + 1;
+    printf("[i] found memcmp @ 0x%x\n", memcmp_addy);
+    uint32_t mach_msg_rpc_from_kernel_proper = (uint32_t)find_sym(kdata, "_mach_msg_rpc_from_kernel_proper")-(uint32_t)kdata+0x1;
+    mach_msg_rpc_from_kernel_proper += 0x80001000;
+    printf("[i] found mach_msg_rpc_from_kernel_proper @ 0x%x\n", mach_msg_rpc_from_kernel_proper);
+#define SHIT_OFFSET 0x56000
+    for (int i = 0; i < ksize; i++) {
+        if (*(uint32_t*)&kdata[i] == (uint32_t)mach_msg_rpc_from_kernel_proper) {
+            printf("[*] found mach_msg_whatever @ 0x%x\n", 0x80001000 + i);
+            if (*(uint32_t*)&kdata[i + 4] == memcmp_addy) {
+                printf("[*] found memcmp_addy @ 0x%x\n", 0x80001000 + i + 0x4);
+                return i + 0x4 + SHIT_OFFSET;
+            }
+        }
+    }
+    return 0xffffffff;
+}

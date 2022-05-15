@@ -21,6 +21,7 @@
 #include <dlfcn.h>
 #include <spawn.h>
 
+#import "patchfinder10.h"
 #import "patchfinder.h"
 #import "lzssdec.h"
 #import "v0rtex.h"
@@ -36,7 +37,7 @@
  */
 
 #define INSTALL_NONPUBLIC_UNTETHER 0
-#define FIRST_TIME_OVERRIDE 0
+#define FIRST_TIME_OVERRIDE 1
 #define INSTALL_UNTETHER 0
 #define BTSERVER_USED 0
 #define UNPATCH_PMAP 0
@@ -62,7 +63,7 @@ uint32_t pmap_addr = 0x003F6454;
 uint32_t a6_1034_pmap_addr = 0x003E9974;
 
 uint32_t find_kernel_pmap(void) {
-	if (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber10_0) {
+	if (i_system_version_field(0) >= 10) {
 		/*
 		 *  janky hack
 		 */
@@ -1163,14 +1164,243 @@ bool post_jailbreak(void) {
 	return ret;
 }
 
+bool extract_bootstrap10(void) {
+	bool re_extracting = false;
+	bool ret = true;
+	
+	if (exists("/.p0laris") || exists("/.installed_home_depot")) {
+		re_extracting = true;
+		lprintf("k? guess we're re-extracting then. your choice, i guess? ...");
+	}
+	
+	progress_ui("getting bundle paths");
+	char* tar_path = bundle_path("tar");
+	char* launchctl_path = bundle_path("launchctl");
+	char* cydia_path = bundle_path("Cydia-9.0r4-Raw.tar");
+	
+	chmod(tar_path, 0777);
+	
+	/*
+	 *  extract bootstrap
+	 */
+	progress_ui("extracting, this might take a while");
+	chmod(tar_path, 0777);
+	char* argv_[] = {tar_path, "-xf", cydia_path, "-C", "/", "--preserve-permissions", NULL};
+	easy_spawn(tar_path, argv_);
+	
+	/*
+	 *  touch cydia_no_stash (disable stashing, not included yet)
+	 */
+	progress_ui("disabling stashing");
+	run_cmd("/bin/touch /.cydia_no_stash");
+	
+	/*
+	 *  copy tar
+	 */
+	progress_ui("copying tar");
+	run_cmd("/bin/cp -p %s /bin/tar", tar_path);
+	
+	/*
+	 *  copy launchctl
+	 */
+	progress_ui("copying launchctl");
+	run_cmd("/bin/cp -p %s /bin/launchctl", launchctl_path);
+	
+	/*
+	 *  make them exectuable
+	 */
+	chmod("/bin/tar", 0755);
+	chmod("/bin/launchctl", 0755);
+	
+	/*
+	 *  i don't remember where this is from, Home Depot / Phoenix?
+	 */
+	chmod("/private", 0755);
+	chmod("/private/var", 0755);
+	chmod("/private/var/mobile", 0711);
+	chmod("/private/var/mobile/Library", 0711);
+	chmod("/private/var/mobile/Library/Preferences", 0755);
+	
+	mkdir("/Library/LaunchDaemons", 0777);
+	
+#if INSTALL_UNTETHER
+	progress_ui("installing untether");
+	install_untether();
+	progress_ui("installed untether");
+#endif
+	
+	if (!exists("/.p0laris")) {
+		FILE* fp = fopen("/.p0laris", "w");
+		fprintf(fp, "please don't delete this, the sky will fall and stuff or something\n"
+				"  - p0laris, with love from spv.\n");
+		fclose(fp);
+	}
+	
+	sync();
+	sync();
+	sync();
+	sync();
+	sync();
+	
+	return ret;
+}
+
+bool post_jailbreak10(void) {
+	bool need_uicache = false;
+	bool ret = true;
+	
+	if (global_untethered) {
+		run_cmd("/usr/sbin/BTServer_");
+#if DO_CSBYPASS
+		csbypass_wrapper();
+#endif
+	}
+	
+	progress_ui("remounting /");
+	char* nmr = strdup("/dev/disk0s1s1");
+	int mntr = mount("hfs", "/", 0x10000, &nmr);
+	lprintf("mount(...); = %d\n", mntr);
+	
+#if !FIRST_TIME_OVERRIDE
+	if (!exists("/.p0laris") && !exists("/.installed_home_depot")) {
+#endif
+		progress_ui("extracting bootstrap");
+		extract_bootstrap10();
+		need_uicache = true;
+#if !FIRST_TIME_OVERRIDE
+	}
+#endif
+	
+#if INSTALL_UNTETHER
+	if (!exists("/untether/p0laris")) {
+		if (exists("/untether")) {
+			progress_ui("fixing untether");
+		} else {
+			progress_ui("installing untether");
+		}
+		install_untether();
+	}
+#endif
+	
+	/*
+	 *  doubleH3lix
+	 */
+	progress_ui("fixing springboard");
+	NSMutableDictionary *md = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.apple.springboard.plist"];
+	
+	[md setObject:[NSNumber numberWithBool:YES] forKey:@"SBShowNonDefaultSystemApps"];
+	
+	[md writeToFile:@"/var/mobile/Library/Preferences/com.apple.springboard.plist" atomically:YES];
+	
+	progress_ui("restarting cfprefsd");
+	run_cmd("/usr/bin/killall -9 cfprefsd &");
+	
+#if !FIRST_TIME_OVERRIDE
+	if (need_uicache) {
+#endif
+		progress_ui("running uicache");
+		run_cmd("su -c uicache mobile &");
+#if !FIRST_TIME_OVERRIDE
+	}
+#endif
+	
+	progress_ui("loading launch daemons");
+	run_cmd("/bin/launchctl load /Library/LaunchDaemons/*");
+	run_cmd("/etc/rc.d/*");
+	
+	progress_ui("respringing");
+	run_cmd("(killall -9 backboardd) &");
+	
+	if (!global_untethered) {
+#if DO_CSBYPASS
+		csbypass_wrapper();
+#endif
+	}
+	
+	return ret;
+}
+
 bool patch_kernel10(uint8_t* buf, uint32_t len) {
+	struct offsets_t* offsets = malloc(sizeof(struct offsets_t));
+	
+	char* version_string = (char*)[[[UIDevice currentDevice] systemVersion]
+										  UTF8String];
+	
+	offsets->mount_common = find_mount_common10(0x80001000, buf, len, version_string);
+	offsets->mapForIO = find_mapForIO10(0x80001000, buf, len, version_string);
+	offsets->PE_i_can_has_debugger_offset = find_PE_i_can_has_debugger_offset10(0x80001000, buf, len, version_string);
+	uint32_t nosuid_enforcement = find_nosuid_enforcement10(0x80001000, buf, len, version_string);
+	uint32_t tfp = find_tfp10(0x80001000, buf, len, version_string);
+	uint32_t fuck = find_fuck(0x80001000, buf, len, version_string);
+	uint32_t bxlr_gadget = find_bxlr_gadget(0x80001000, buf, len, version_string);
+	uint32_t amfi_memcmp = find_amfi_memcmp(0x80001000, buf, len, version_string);
+	offsets->sbops = find_sbops(0x80001000, buf, len, version_string);
+	
+	lprintf("mount_common = 0x%08x", offsets->mount_common);
+	lprintf("mapForIO = 0x%08x", offsets->mapForIO);
+	lprintf("PE_i_can_has_debugger_offset = 0x%08x", offsets->PE_i_can_has_debugger_offset);
+	lprintf("nosuid_enforcement = 0x%08x", nosuid_enforcement);
+	lprintf("tfp = 0x%08x", tfp);
+	lprintf("fuck = 0x%08x", fuck);
+	lprintf("amfi_memcmp = 0x%08x", amfi_memcmp);
+	lprintf("bxlr_gadget = 0x%08x", bxlr_gadget);
+	lprintf("sbops = 0x%08x", offsets->sbops);
+	
+	kwrite_uint8(kernel_base + offsets->mount_common, 0xe0);
+	kwrite_uint32(kernel_base + offsets->mapForIO, 0xbf00bf00);
+	kwrite_uint32(kernel_base + offsets->PE_i_can_has_debugger_offset, 0x20012001);
+	kwrite_uint8(kernel_base + nosuid_enforcement, 0x0);
+	kwrite_uint8(kernel_base + tfp + 0x0, 0x0);
+	kwrite_uint8(kernel_base + tfp + 0x1, 0xbf);
+	kwrite_uint32(kernel_base + fuck, kernel_base + offsets->mapForIO);
+	kwrite_uint32(kernel_base + amfi_memcmp, kernel_base + bxlr_gadget);
+	
+	/*
+	 *  fuck the sandbox
+	 */
+	lprintf("nuking sandbox @ 0x%08x", kernel_base + offsets->sbops);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_rename), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_access), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_chroot), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_create), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_file_check_mmap), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_deleteextattr), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_exchangedata), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_exec), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getattrlist), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getextattr), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_ioctl), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_link), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_listextattr), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_open), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_readlink), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setattrlist), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setextattr), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setflags), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setmode), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setowner), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setutimes), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setutimes), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_stat), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_truncate), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_unlink), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_notify_create), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_fsgetpath), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getattr), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_mount_check_stat), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_proc_check_fork), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_iokit_check_get_property), 0);
+	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_cred_label_update_execve), 0);
+	
 	return true;
 }
 
 bool jailbreak10(void) {
 	uint32_t before, after, pdstused, psrcused;
 	uint8_t *buf, *start_buf, *whatever;
-	char* darwin_kernel;
+	char *darwin_kernel, *doc_dir;
+	NSString *documentsDirectory;
+	NSArray *paths;
 	size_t sz;
 	
 	tfp0 = v0rtex_me_harder();
@@ -1224,13 +1454,27 @@ bool jailbreak10(void) {
 	printf("%x\n", *(uint32_t*)start_buf);
 	
 	lzss_me_harder(whatever, sz * 2, &pdstused, start_buf, sz, &psrcused);
+	
+	paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	documentsDirectory = [paths firstObject];
+	doc_dir = (char*)[documentsDirectory UTF8String];
+	
+	FILE* fp2 = fopen(strcat(doc_dir, "/lzssed.bin"), "wb");
+	fwrite(whatever, 1, sz * 2, fp2);
+	fclose(fp2);
+	
 	darwin_kernel = (char*)memmem(whatever, sz * 2, "Darwin", strlen("Darwin"));
 	
 	printf("%s\n", darwin_kernel);
 	printf("%x\n", *(uint32_t*)whatever);
 	
+	patch_kernel10(whatever, sz * 2);
+	
 	free(buf);
 	fclose(fp);
+	
+	progress_ui("doing post jailbreak work");
+	post_jailbreak10();
 	
 done:
 	return true;
@@ -1258,7 +1502,7 @@ bool jailbreak(void) {
 	
 	progress_ui("exploiting kernel");
 	
-	if (floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber10_0) {
+	if (i_system_version_field(0) >= 10) {
 		return jailbreak10();
 	}
 	

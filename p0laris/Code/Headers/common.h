@@ -8,6 +8,7 @@
 #ifndef common_h
 #define common_h
 
+#include <UIKit/UIDevice.h>
 #include <stdbool.h>
 
 extern bool global_untethered;
@@ -35,5 +36,21 @@ extern bool global_untethered;
 	typedef uint32_t kptr_t;
 #endif
 typedef struct load_command mach_lc_t;
+
+#ifndef func_i_system_version_field
+#define func_i_system_version_field
+
+inline static int i_system_version_field(unsigned int fieldIndex) {
+  NSString* const versionString = UIDevice.currentDevice.systemVersion;
+  NSArray<NSString*>* const versionFields = [versionString componentsSeparatedByString:@"."];
+  if (fieldIndex < versionFields.count) {
+	NSString* const field = versionFields[fieldIndex];
+	return field.intValue;
+  }
+  NSLog(@"[WARNING] i_system_version(%iu): field index not present in version string '%@'.", fieldIndex, versionString);
+  return -1; // error indicator
+}
+
+#endif
 
 #endif /* common_h */
