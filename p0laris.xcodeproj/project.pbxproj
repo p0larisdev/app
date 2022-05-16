@@ -13,8 +13,6 @@
 		A77747F12794BD91004F78E6 /* Milkshake.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A77747F02794BD2A004F78E6 /* Milkshake.ttf */; };
 		A78923CA2793F5C600A61440 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A78923C92793F5BF00A61440 /* logo.png */; };
 		A7A2DE692830284300CE5939 /* p0laris.png in Resources */ = {isa = PBXBuildFile; fileRef = A7A2DE682830284300CE5939 /* p0laris.png */; };
-		A7A2DE7028302E8200CE5939 /* v0rtex.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2DE6C28302E8000CE5939 /* v0rtex.m */; };
-		A7A2DE7128302E8200CE5939 /* offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A7A2DE6E28302E8100CE5939 /* offsets.m */; };
 		A7B651102747FC9E0014D089 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B6510F2747FC9E0014D089 /* AppDelegate.m */; };
 		A7B651162747FC9E0014D089 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B651152747FC9E0014D089 /* ViewController.m */; };
 		A7B651192747FC9E0014D089 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B651172747FC9E0014D089 /* Main.storyboard */; };
@@ -23,9 +21,16 @@
 		A7B651212747FCB50014D089 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B651202747FCB50014D089 /* main.m */; settings = {COMPILER_FLAGS = "-D __ID_STUFF__=\"\\\"$EXECUTABLE_NAME-$USER-$UID-$PLATFORM_NAME-$CURRENT_ARCH-$FULL_PRODUCT_NAME-$SDK_NAME-$SDK_PRODUCT_BUILD_VERSION-$XCODE_PRODUCT_BUILD_VERSION\\\"\""; }; };
 		A7B6512C27480E770014D089 /* phoenix.c in Sources */ = {isa = PBXBuildFile; fileRef = A7B6512B27480E770014D089 /* phoenix.c */; };
 		A7B6512F27480E8C0014D089 /* jailbreak.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B6512E27480E8C0014D089 /* jailbreak.m */; };
-		A7DFB3CE2830735C006B22EC /* lzssdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB3CC2830735B006B22EC /* lzssdec.cpp */; };
-		A7DFB3CF2830735C006B22EC /* patchfinder10.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB3CD2830735C006B22EC /* patchfinder10.c */; };
+		A7C1DD7F2832F62800888CC0 /* lzssdec.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7C1DD7A2832F61500888CC0 /* lzssdec.cpp */; };
+		A7C1DD812832F62A00888CC0 /* pf10.c in Sources */ = {isa = PBXBuildFile; fileRef = A7C1DD782832F61500888CC0 /* pf10.c */; };
+		A7C1DD832832F62C00888CC0 /* patchfinder10.c in Sources */ = {isa = PBXBuildFile; fileRef = A7C1DD762832F61500888CC0 /* patchfinder10.c */; };
 		A7DFB3D32830736A006B22EC /* patchfinder.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB3D22830736A006B22EC /* patchfinder.c */; };
+		A7DFB441283199DC006B22EC /* Cydia-10.tar in Resources */ = {isa = PBXBuildFile; fileRef = A7DFB43628319889006B22EC /* Cydia-10.tar */; };
+		A7DFB44E2831B312006B22EC /* kernel_memory.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB4492831B311006B22EC /* kernel_memory.c */; };
+		A7DFB44F2831B312006B22EC /* sp_offsets.m in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB44A2831B311006B22EC /* sp_offsets.m */; };
+		A7DFB4502831B312006B22EC /* iosurface.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB44B2831B311006B22EC /* iosurface.c */; };
+		A7DFB4512831B312006B22EC /* exploit_utilities.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB44C2831B311006B22EC /* exploit_utilities.c */; };
+		A7DFB4522831B312006B22EC /* exploit.c in Sources */ = {isa = PBXBuildFile; fileRef = A7DFB44D2831B311006B22EC /* exploit.c */; };
 		A7E888F8274ED0AC00989B65 /* Cydia-9.0r4-Raw.tar in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F5274ED0AB00989B65 /* Cydia-9.0r4-Raw.tar */; };
 		A7E888F9274ED0AC00989B65 /* launchctl in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F6274ED0AB00989B65 /* launchctl */; };
 		A7E888FA274ED0AC00989B65 /* tar in Resources */ = {isa = PBXBuildFile; fileRef = A7E888F7274ED0AC00989B65 /* tar */; };
@@ -6684,13 +6689,27 @@
 		A7B6512B27480E770014D089 /* phoenix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = phoenix.c; sourceTree = "<group>"; };
 		A7B6512E27480E8C0014D089 /* jailbreak.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreak.m; sourceTree = "<group>"; usesTabs = 1; };
 		A7B65135274810BE0014D089 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = IOKit/IOKit.framework; sourceTree = "<group>"; };
-		A7DFB3C92830734D006B22EC /* mac_policy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mac_policy.h; path = "p0laris/Code/Patchfinder/iOS 10/mac_policy.h"; sourceTree = SOURCE_ROOT; };
-		A7DFB3CA2830735B006B22EC /* patchfinder10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patchfinder10.h; path = "p0laris/Code/Patchfinder/iOS 10/patchfinder10.h"; sourceTree = SOURCE_ROOT; };
-		A7DFB3CB2830735B006B22EC /* lzssdec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lzssdec.h; path = "p0laris/Code/Patchfinder/iOS 10/lzssdec.h"; sourceTree = SOURCE_ROOT; };
-		A7DFB3CC2830735B006B22EC /* lzssdec.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lzssdec.cpp; path = "p0laris/Code/Patchfinder/iOS 10/lzssdec.cpp"; sourceTree = SOURCE_ROOT; };
-		A7DFB3CD2830735C006B22EC /* patchfinder10.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = patchfinder10.c; path = "p0laris/Code/Patchfinder/iOS 10/patchfinder10.c"; sourceTree = SOURCE_ROOT; };
+		A7C1DD762832F61500888CC0 /* patchfinder10.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = patchfinder10.c; sourceTree = "<group>"; };
+		A7C1DD772832F61500888CC0 /* mac_policy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mac_policy.h; sourceTree = "<group>"; };
+		A7C1DD782832F61500888CC0 /* pf10.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pf10.c; sourceTree = "<group>"; };
+		A7C1DD792832F61500888CC0 /* patchfinder10.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = patchfinder10.h; sourceTree = "<group>"; };
+		A7C1DD7A2832F61500888CC0 /* lzssdec.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lzssdec.cpp; sourceTree = "<group>"; };
+		A7C1DD7B2832F61500888CC0 /* pf10.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pf10.h; sourceTree = "<group>"; };
+		A7C1DD7C2832F61500888CC0 /* lzssdec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lzssdec.h; sourceTree = "<group>"; };
 		A7DFB3D12830736A006B22EC /* patchfinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = patchfinder.h; path = p0laris/Code/Patchfinder/patchfinder.h; sourceTree = "<group>"; };
 		A7DFB3D22830736A006B22EC /* patchfinder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = patchfinder.c; path = p0laris/Code/Patchfinder/patchfinder.c; sourceTree = "<group>"; };
+		A7DFB43328319280006B22EC /* mac_policy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mac_policy.h; sourceTree = "<group>"; };
+		A7DFB43628319889006B22EC /* Cydia-10.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = "Cydia-10.tar"; sourceTree = "<group>"; };
+		A7DFB4442831B311006B22EC /* kernel_memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel_memory.h; sourceTree = "<group>"; };
+		A7DFB4452831B311006B22EC /* sp_offsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sp_offsets.h; sourceTree = "<group>"; };
+		A7DFB4462831B311006B22EC /* exploit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exploit.h; sourceTree = "<group>"; };
+		A7DFB4472831B311006B22EC /* exploit_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exploit_utilities.h; sourceTree = "<group>"; };
+		A7DFB4482831B311006B22EC /* iosurface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iosurface.h; sourceTree = "<group>"; };
+		A7DFB4492831B311006B22EC /* kernel_memory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kernel_memory.c; sourceTree = "<group>"; };
+		A7DFB44A2831B311006B22EC /* sp_offsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = sp_offsets.m; sourceTree = "<group>"; };
+		A7DFB44B2831B311006B22EC /* iosurface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iosurface.c; sourceTree = "<group>"; };
+		A7DFB44C2831B311006B22EC /* exploit_utilities.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = exploit_utilities.c; sourceTree = "<group>"; };
+		A7DFB44D2831B311006B22EC /* exploit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = exploit.c; sourceTree = "<group>"; };
 		A7E888F5274ED0AB00989B65 /* Cydia-9.0r4-Raw.tar */ = {isa = PBXFileReference; lastKnownFileType = archive.tar; path = "Cydia-9.0r4-Raw.tar"; sourceTree = "<group>"; };
 		A7E888F6274ED0AB00989B65 /* launchctl */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = launchctl; sourceTree = "<group>"; };
 		A7E888F7274ED0AC00989B65 /* tar */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = tar; sourceTree = "<group>"; };
@@ -6727,6 +6746,7 @@
 		A7463223274ECC2500F7B5CE /* Kernel Exploit */ = {
 			isa = PBXGroup;
 			children = (
+				A7DFB4432831B311006B22EC /* sock_port */,
 				A7A2DE6F28302E8100CE5939 /* offsets.h */,
 				A7A2DE6E28302E8100CE5939 /* offsets.m */,
 				A7A2DE6D28302E8000CE5939 /* v0rtex.h */,
@@ -6758,6 +6778,7 @@
 		A7573054279B118D004A4E83 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				A7DFB43328319280006B22EC /* mac_policy.h */,
 				A757305B279B1382004A4E83 /* jailbreak.h */,
 				A7573057279B11A7004A4E83 /* log.h */,
 				A7573055279B118D004A4E83 /* common.h */,
@@ -17608,7 +17629,7 @@
 		A78923C52793F0FD00A61440 /* Patchfinder */ = {
 			isa = PBXGroup;
 			children = (
-				A7DFB3AA2830460E006B22EC /* iOS 10 */,
+				A7C1DD752832F61500888CC0 /* iOS 10 */,
 				A7DFB3D22830736A006B22EC /* patchfinder.c */,
 				A7DFB3D12830736A006B22EC /* patchfinder.h */,
 			);
@@ -17685,21 +17706,42 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A7DFB3AA2830460E006B22EC /* iOS 10 */ = {
+		A7C1DD752832F61500888CC0 /* iOS 10 */ = {
 			isa = PBXGroup;
 			children = (
-				A7DFB3C92830734D006B22EC /* mac_policy.h */,
-				A7DFB3CC2830735B006B22EC /* lzssdec.cpp */,
-				A7DFB3CB2830735B006B22EC /* lzssdec.h */,
-				A7DFB3CD2830735C006B22EC /* patchfinder10.c */,
-				A7DFB3CA2830735B006B22EC /* patchfinder10.h */,
+				A7C1DD762832F61500888CC0 /* patchfinder10.c */,
+				A7C1DD772832F61500888CC0 /* mac_policy.h */,
+				A7C1DD782832F61500888CC0 /* pf10.c */,
+				A7C1DD792832F61500888CC0 /* patchfinder10.h */,
+				A7C1DD7A2832F61500888CC0 /* lzssdec.cpp */,
+				A7C1DD7B2832F61500888CC0 /* pf10.h */,
+				A7C1DD7C2832F61500888CC0 /* lzssdec.h */,
 			);
-			path = "iOS 10";
+			name = "iOS 10";
+			path = "p0laris/Code/Patchfinder/iOS 10";
+			sourceTree = "<group>";
+		};
+		A7DFB4432831B311006B22EC /* sock_port */ = {
+			isa = PBXGroup;
+			children = (
+				A7DFB4442831B311006B22EC /* kernel_memory.h */,
+				A7DFB4452831B311006B22EC /* sp_offsets.h */,
+				A7DFB4462831B311006B22EC /* exploit.h */,
+				A7DFB4472831B311006B22EC /* exploit_utilities.h */,
+				A7DFB4482831B311006B22EC /* iosurface.h */,
+				A7DFB4492831B311006B22EC /* kernel_memory.c */,
+				A7DFB44A2831B311006B22EC /* sp_offsets.m */,
+				A7DFB44B2831B311006B22EC /* iosurface.c */,
+				A7DFB44C2831B311006B22EC /* exploit_utilities.c */,
+				A7DFB44D2831B311006B22EC /* exploit.c */,
+			);
+			path = sock_port;
 			sourceTree = "<group>";
 		};
 		A7E888F4274ED01B00989B65 /* Bootstrap */ = {
 			isa = PBXGroup;
 			children = (
+				A7DFB43628319889006B22EC /* Cydia-10.tar */,
 				A7E888F5274ED0AB00989B65 /* Cydia-9.0r4-Raw.tar */,
 				A7E888F6274ED0AB00989B65 /* launchctl */,
 				A7E888F7274ED0AC00989B65 /* tar */,
@@ -17767,6 +17809,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7DFB441283199DC006B22EC /* Cydia-10.tar in Resources */,
 				A77747F12794BD91004F78E6 /* Milkshake.ttf in Resources */,
 				A7E888FA274ED0AC00989B65 /* tar in Resources */,
 				A78923CA2793F5C600A61440 /* logo.png in Resources */,
@@ -17817,17 +17860,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7DFB3CE2830735C006B22EC /* lzssdec.cpp in Sources */,
-				A7DFB3CF2830735C006B22EC /* patchfinder10.c in Sources */,
-				A7A2DE7128302E8200CE5939 /* offsets.m in Sources */,
+				A7DFB44E2831B312006B22EC /* kernel_memory.c in Sources */,
+				A7DFB4512831B312006B22EC /* exploit_utilities.c in Sources */,
+				A7DFB4522831B312006B22EC /* exploit.c in Sources */,
+				A7DFB4502831B312006B22EC /* iosurface.c in Sources */,
 				A7B651162747FC9E0014D089 /* ViewController.m in Sources */,
 				A757304D279B1126004A4E83 /* log.m in Sources */,
 				A7B6512C27480E770014D089 /* phoenix.c in Sources */,
+				A7C1DD832832F62C00888CC0 /* patchfinder10.c in Sources */,
 				A7DFB3D32830736A006B22EC /* patchfinder.c in Sources */,
-				A7A2DE7028302E8200CE5939 /* v0rtex.m in Sources */,
+				A7C1DD812832F62A00888CC0 /* pf10.c in Sources */,
 				A7B651102747FC9E0014D089 /* AppDelegate.m in Sources */,
+				A7C1DD7F2832F62800888CC0 /* lzssdec.cpp in Sources */,
 				A738C75127A450BE00005412 /* quote.m in Sources */,
 				A7B6512F27480E8C0014D089 /* jailbreak.m in Sources */,
+				A7DFB44F2831B312006B22EC /* sp_offsets.m in Sources */,
 				A7B651212747FCB50014D089 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

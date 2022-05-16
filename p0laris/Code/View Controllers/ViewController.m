@@ -29,16 +29,16 @@ id param_;
 }
 #endif
 
--(void)_set_label_text: (char*)s {
-	NSString* s_as_NSString = [NSString stringWithUTF8String:s];
-	[_status_label setText:s_as_NSString];
+-(void)_set_label_text: (NSString*)s {
+	[_status_label setText:s];
 	[self.status_label setHidden:false];
 	return;
 }
 
 void set_label_text(char* s) {
+	NSString* s_as_NSString = [NSString stringWithUTF8String:s];
 	dispatch_async(dispatch_get_main_queue(), ^{
-		[param_ _set_label_text:s];
+		[param_ _set_label_text:s_as_NSString];
 	});
 }
 

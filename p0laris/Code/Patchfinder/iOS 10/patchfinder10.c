@@ -202,6 +202,7 @@ uint32_t find_kext_text_section(void *kernelcache, size_t size, const char *name
     
     return 0;
 }
+#define SHIT_OFFSET 0x56000
 
 uint32_t find_mount_common10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
     float version_float = strtof(version, 0);
@@ -283,7 +284,7 @@ uint32_t find_fuck(uint32_t region, uint8_t* kdata, size_t ksize, char* version)
         if (*(uint32_t*)&kdata[i] == OSMalloc_Tagfree10) {
             if (*(uint32_t*)&kdata[i+0x4] == PE_i_can_has_kernel_configuration) {
                 printf("[*] found lwvm call thingy: 0x%x\n", i + 0x4);
-                return i + 0x4;
+                return i + 0x4 + SHIT_OFFSET;
             }
         }
     }
@@ -310,7 +311,6 @@ uint32_t find_amfi_memcmp(uint32_t region, uint8_t* kdata, size_t ksize, char* v
     uint32_t mach_msg_rpc_from_kernel_proper = (uint32_t)find_sym(kdata, "_mach_msg_rpc_from_kernel_proper")-(uint32_t)kdata+0x1;
     mach_msg_rpc_from_kernel_proper += 0x80001000;
     printf("[i] found mach_msg_rpc_from_kernel_proper @ 0x%x\n", mach_msg_rpc_from_kernel_proper);
-#define SHIT_OFFSET 0x56000
     for (int i = 0; i < ksize; i++) {
         if (*(uint32_t*)&kdata[i] == (uint32_t)mach_msg_rpc_from_kernel_proper) {
             printf("[*] found mach_msg_whatever @ 0x%x\n", 0x80001000 + i);
@@ -321,4 +321,26 @@ uint32_t find_amfi_memcmp(uint32_t region, uint8_t* kdata, size_t ksize, char* v
         }
     }
     return 0xffffffff;
+}
+
+uint32_t find_sbops10(uint32_t region, uint8_t* kdata, size_t ksize, char* version) {
+    uint32_t seatbelt_sandbox_policy_ptr = (uint32_t)memmem(kdata, ksize, "Seatbelt sandbox policy", strlen("Seatbelt sandbox policy")) - (uint32_t)kdata;
+    uint32_t kextbase = find_kextbase(kdata, ksize) - 0x80001000;
+    uint32_t str_ref = seatbelt_sandbox_policy_ptr + 0x80001000 + kextbase;
+    uint32_t str_xref = 0;
+    for (int af = 0; af < ksize; af++) {
+        if (*(uint32_t*)&kdata[af] == str_ref) {
+            str_xref = af;
+            break;
+        }
+    }
+    uint32_t off = 0x0;
+    for (uint32_t cur1=str_xref; cur1 < (str_xref + 0x10); cur1++) {
+        if (*(uint32_t*)&kdata[cur1] == 0x1) {
+            off = cur1 + 0x4;
+            break;
+        }
+    }
+    uint32_t sbops_offset = *(uint32_t*)&kdata[off] - 0x80001000;
+    return sbops_offset;
 }

