@@ -124,6 +124,7 @@ char* quotes[] = {
 	"i just drank a fifth of vodka, dare me to drive?",
 	"series of tubes",
 	"p0laris.dev",
+	"Not gonna be active on Discord tonight.",
 };
 
 char* get_quote(void) {
