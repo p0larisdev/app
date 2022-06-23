@@ -11,7 +11,7 @@ other versions are a bit hit or miss.
 ### WIP support
 - iOS 10.x on all A6(x).
 
-- full iOS 9.x.
+- full iOS 9.x on 32-bit.
 
 ### greetz
 ```
