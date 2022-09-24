@@ -125,6 +125,10 @@ char* quotes[] = {
 	"series of tubes",
 	"p0laris.dev",
 	"Not gonna be active on Discord tonight.",
+	"you wouldn't download a fucking car, would you?",
+	"tip: of the iceberg",
+	"tip: of these nuts",
+	"tip: just the",
 };
 
 char* get_quote(void) {
