@@ -129,6 +129,9 @@ char* quotes[] = {
 	"tip: of the iceberg",
 	"tip: of these nuts",
 	"tip: just the",
+	"deez",
+	"nuts",
+	"deez nuts"
 };
 
 char* get_quote(void) {
