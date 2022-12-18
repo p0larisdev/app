@@ -131,7 +131,17 @@ char* quotes[] = {
 	"tip: just the",
 	"deez",
 	"nuts",
-	"deez nuts"
+	"Ukrain !!!! e,"
+	"Shit pants"
+	".su"
+	"Ala,"
+	"IOS 4.1 GEEKGRADE JB REAL!!!"
+	"IPHONE 4 CUSTOM IPSW IOS 6.1.7!!"
+	"S."
+	"tinyurl.com/REALlol11"
+	"Frt Nite !!!"
+	"ass"
+// is this enough
 };
 
 char* get_quote(void) {
