@@ -142,7 +142,7 @@ char* quotes[] = {
 	"tinyurl.com/REALlol11",
 	"Frt Nite !!!",
 	"ass"
-//is this enough
+/*is this enough*/
 };
 
 char* get_quote(void) {
