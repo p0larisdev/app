@@ -1,0 +1,35 @@
+name: Xcode - Build and Analyze
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    name: Build and analyse default scheme using xcodebuild command
+    runs-on: macos-12
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+           xcode-version: '13.4.1'
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set Default Scheme
+        run: |
+          scheme_list=$(xcodebuild -list -json | tr -d "\n")
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          echo $default | cat >default
+          echo Using default scheme: $default
+      - name: Build
+        env:
+          scheme: ${{ 'default' }}
+        run: |
+          make
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Release
+          path: |
+            *.ipa
